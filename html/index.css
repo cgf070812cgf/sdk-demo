@@ -1,0 +1,18 @@
+.market_icon{
+    border-radius: 50%;
+    width: 100px;
+    height: auto;
+    margin: auto;
+    /* overflow: hidden; */
+}
+body{
+    /* background-color: rgb(196, 196, 196); */
+}
+.market_icon img{
+    border-radius: 50%;
+    width: 100px;
+    height: auto;
+    max-height: 100px;
+    border: 3px solid #00ffff;
+    
+}

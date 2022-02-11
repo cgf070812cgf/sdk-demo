@@ -1,0 +1,6 @@
+src
+jsdoc.json
+test
+jest.config.jsdoc
+node_modules
+tsconfig.json
