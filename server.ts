@@ -1,6 +1,7 @@
 import SDK from "./packages/sdk/dist";
 import types from "@zeitgeistpm/sdk/dist/types";
 import { ApiPromise, WsProvider } from "@polkadot/api";
+
 //=================================================================
 
 var InitSDK;
