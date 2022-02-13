@@ -1,7 +1,7 @@
 # sdk-demo
 
 ## 使用前
-执行`npm install`补全所有npm包
+执行`cnpm install`补全所有npm包
 
 ## 编译 server.ts
 ```shell
