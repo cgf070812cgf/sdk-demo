@@ -6,7 +6,7 @@
   "author": "Whisker17 <yukaijun123456@163.com>",
   "license": "MIT",
   "dependencies": {
-    "@zeitgeistpm/sdk": "^0.4.2",
+    "@zeitgeistpm/sdk": "^0.4.3",
     "admin-lte": "^3.2.0",
     "echarts": "^5.3.0",
     "express": "^4.17.2",

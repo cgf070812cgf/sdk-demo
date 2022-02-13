@@ -10,13 +10,15 @@ var InfoDist = {};
 var SlugDist = {};
 var mSlugDist = {};
 var express = require('express'),
-app = express(),
-server = require('http').createServer(app),
-io = require('socket.io')(server),
-port = process.env.PORT || 6603;	//服务器端口
+    app = express(),
+    server = require('http').createServer(app),
+    io = require('socket.io')(server),
+    port = process.env.PORT || 6603;	//服务器端口
 app.use(express.static(__dirname + '/html'));
 
 const ZTGNET = "wss://bp-rpc.zeitgeist.pm";
+// wss://bsr.zeitgeist.pm
+// wss://bp-rpc.zeitgeist.pm
 type Options = {
     endpoint: string;
     graphQlEndpoint: string;
@@ -68,12 +70,12 @@ async function m_MarketCount() {
 }
 async function m_MarketsInfo(id: number, flag: boolean) {
     let res;
-    if(flag){
+    if (flag) {
         res = await InitSDK.fetchMarketData(id);
-    }else{
+    } else {
         res = InfoDist[id];
     }
-    
+
     return res;
 }
 async function m_BlockInfo() {
@@ -89,13 +91,13 @@ async function m_BlockInfo() {
 //  获取每个Info中的slug
 //=======================
 function GetSlug(tag, slug, marketId, categories) {
-    if(!mSlugDist.hasOwnProperty(tag)){
+    if (!mSlugDist.hasOwnProperty(tag)) {
         mSlugDist[tag] = {};
         mSlugDist[tag]['slug'] = [];
         mSlugDist[tag]['marketId'] = [];
-        mSlugDist[tag]['categories'] = []; 
+        mSlugDist[tag]['categories'] = [];
     }
-    if(slug == null){
+    if (slug == null) {
         slug = 'null'
     }
     mSlugDist[tag]['slug'].push(slug);
@@ -113,10 +115,10 @@ function SaveSlug() {
 }
 //定时任务
 function intervalFunc() {
-    if(ConnectSum > 0){
+    if (ConnectSum > 0) {
         console.log('===Flush data===')
         GetCount(1, false);
-        GetBlock(1, false); 
+        GetBlock(1, false);
         console.log('===Flush done===')
     }
 
@@ -138,51 +140,51 @@ function GetTagList() {
             for (let index = 1; index <= mCount; index++) {
                 setTimeout(function () {
                     m_MarketsInfo(index, true)
-                    .then(function (value) {
-                        let tags = value.tags;
-                        let slug = value.slug;
-                        let marketId = value.marketId;
-                        let categories = value.categories;
-                        InfoDist[marketId] = value;
-                        // 无tag的market存储
-                        if (tags.length == 0) {
-                            if (mdist.hasOwnProperty('null')) {
-                                mdist['null'] += 1;
-                            } else {
-                                mdist['null'] = 1;
-                                mdist['type_count'] += 1;
-                            }
-                            GetSlug('null', slug, marketId, categories)
-                        } else {
-                            for (let i = 0; i < tags.length; i++) {
-                                if (mdist.hasOwnProperty(tags[i])) {
-                                    mdist[tags[i]] += 1;
+                        .then(function (value) {
+                            let tags = value.tags;
+                            let slug = value.slug;
+                            let marketId = value.marketId;
+                            let categories = value.categories;
+                            InfoDist[marketId] = value;
+                            // 无tag的market存储
+                            if (tags.length == 0) {
+                                if (mdist.hasOwnProperty('null')) {
+                                    mdist['null'] += 1;
                                 } else {
-                                    mdist[tags[i]] = 1;
+                                    mdist['null'] = 1;
                                     mdist['type_count'] += 1;
                                 }
-                                GetSlug(tags[i], slug, marketId, categories)
+                                GetSlug('null', slug, marketId, categories)
+                            } else {
+                                for (let i = 0; i < tags.length; i++) {
+                                    if (mdist.hasOwnProperty(tags[i])) {
+                                        mdist[tags[i]] += 1;
+                                    } else {
+                                        mdist[tags[i]] = 1;
+                                        mdist['type_count'] += 1;
+                                    }
+                                    GetSlug(tags[i], slug, marketId, categories)
+                                }
                             }
-                        }
-                        mdist['sum_count'] += 1;
-                        console.log("collect finish:" + index + '  already:' + mdist['sum_count'] + '  Sum:' + mCount);
-                        //由于是异步操作只能通过每次检查计数判断是否读取完成
-                        if (mdist['sum_count'] == mCount) {
-                            SaveSlug()
-                            console.log("tag collect finish")
-                            setInterval(intervalFunc, 10000);
-                            // console.log(mdist)
-                            dist = mdist
-                        }
-                    })
-                    .catch(function (value) {
-                        console.log(value);
-                        console.log("tag collect error")
-                        // console.log(dist)
-                    })
-                },1)
+                            mdist['sum_count'] += 1;
+                            console.log("collect finish:" + index + '  already:' + mdist['sum_count'] + '  Sum:' + mCount);
+                            //由于是异步操作只能通过每次检查计数判断是否读取完成
+                            if (mdist['sum_count'] == mCount) {
+                                SaveSlug()
+                                console.log("tag collect finish")
+                                setInterval(intervalFunc, 10000);
+                                // console.log(mdist)
+                                dist = mdist
+                            }
+                        })
+                        .catch(function (value) {
+                            console.log(value);
+                            console.log("tag collect error")
+                            // console.log(dist)
+                        })
+                }, 1)
             }
-            
+
         })
         .catch(function (value) {
             console.log('ERROR:' + value);
@@ -200,18 +202,18 @@ function GetCount(socket, flag) {
     console.log("GetCount")
     m_MarketCount()
         .then(function (value) {
-            if(flag){
+            if (flag) {
                 socket.emit('MarketCount', {			//发送给当前通信的客户端
                     data: value,
                     name: "MarketCount"
                 });
-            }else{
+            } else {
                 io.emit('MarketCount', {			//发送给当前通信的客户端
                     data: value,
                     name: "MarketCount"
                 });
             }
-            
+
         })
         .catch(function (value) {
             console.log('ERROR:' + value);
@@ -236,12 +238,12 @@ function GetBlock(socket, flag) {
     console.log("GetBlock")
     m_BlockInfo()
         .then(function (value) {
-            if(flag){
+            if (flag) {
                 socket.emit('GetBlock', {			//发送给当前通信的客户端
                     data: value[0],
                     name: "GetBlock"
                 });
-            }else{
+            } else {
                 io.emit('GetBlock', {			//发送给当前通信的客户端
                     data: value[0],
                     name: "GetBlock"
@@ -262,7 +264,7 @@ SDKInit()
 
         io.on('connection', async (socket) => {
             ConnectSum += 1;
-            console.log('===OnLine:'+ ConnectSum +'===')
+            console.log('===OnLine:' + ConnectSum + '===')
 
             SendTagList(socket);
             socket.on('GetCount', async (data) => {
@@ -277,8 +279,8 @@ SDKInit()
             });
             socket.on('disconnect', function () {
                 ConnectSum -= 1;
-                console.log('['+ConnectSum+'] one leave');
-                
+                console.log('[' + ConnectSum + '] one leave');
+
             });
         });
 
@@ -288,6 +290,6 @@ SDKInit()
         });
     })
     .catch(function (value) {
-            console.log('ERROR:' + value);
-        })
+        console.log('ERROR:' + value);
+    })
 
