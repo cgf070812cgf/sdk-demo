@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var dist_1 = require("./packages/sdk/dist");
+// import types from "@zeitgeistpm/sdk/dist/types";
 var api_1 = require("@polkadot/api");
 //=================================================================
 var InitSDK;
@@ -51,13 +52,17 @@ var ZTGNET = "wss://bp-rpc.zeitgeist.pm";
 var opts = {
     endpoint: ZTGNET,
     graphQlEndpoint: "https://processor.zeitgeist.pm/graphql",
-    statuses: ["Active"],
-    orderBy: "newest",
-    ordering: "desc",
+    // statuses: ["Active"],
+    // orderBy: "newest",
+    // ordering: "desc",
     pageSize: 10,
     pageNumber: 1
 };
-var endpoint = opts.endpoint, graphQlEndpoint = opts.graphQlEndpoint, statuses = opts.statuses, ordering = opts.ordering, orderBy = opts.orderBy, pageNumber = opts.pageNumber, pageSize = opts.pageSize, creator = opts.creator, oracle = opts.oracle;
+var endpoint = opts.endpoint, graphQlEndpoint = opts.graphQlEndpoint, 
+// statuses,
+// ordering,
+// orderBy,
+pageNumber = opts.pageNumber, pageSize = opts.pageSize, creator = opts.creator, oracle = opts.oracle;
 var provider = new api_1.WsProvider(ZTGNET);
 //======================================================
 function SDKInit() {

@@ -1,5 +1,5 @@
 import SDK from "./packages/sdk/dist";
-import types from "@zeitgeistpm/sdk/dist/types";
+// import types from "@zeitgeistpm/sdk/dist/types";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 
 //=================================================================
@@ -23,9 +23,9 @@ const ZTGNET = "wss://bp-rpc.zeitgeist.pm";
 type Options = {
     endpoint: string;
     graphQlEndpoint: string;
-    statuses: types.MarketStatusText[];
-    ordering: types.MarketsOrdering;
-    orderBy: types.MarketsOrderBy;
+    // statuses: types.MarketStatusText[];
+    // ordering: types.MarketsOrdering;
+    // orderBy: types.MarketsOrderBy;
     pageNumber: number;
     pageSize: number;
     creator?: string;
@@ -34,9 +34,9 @@ type Options = {
 var opts: Options = {
     endpoint: ZTGNET,
     graphQlEndpoint: "https://processor.zeitgeist.pm/graphql",
-    statuses: ["Active"],
-    orderBy: "newest",
-    ordering: "desc",
+    // statuses: ["Active"],
+    // orderBy: "newest",
+    // ordering: "desc",
     pageSize: 10,
     pageNumber: 1
 };
@@ -44,9 +44,9 @@ var opts: Options = {
 let {
     endpoint,
     graphQlEndpoint,
-    statuses,
-    ordering,
-    orderBy,
+    // statuses,
+    // ordering,
+    // orderBy,
     pageNumber,
     pageSize,
     creator,
