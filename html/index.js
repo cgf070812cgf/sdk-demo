@@ -34,7 +34,7 @@ function ChartOption(colorList, mdata, dataList, nameList) {
                 },
                 label: {
                     normal: {
-                        formatter: '{b}:{c}' + '\n\r' + '({d}%)',
+                        // formatter: '{b}:{c}' + '\n\r' + '({d}%)',
                         show: false,
                         position: 'center'
                     },
@@ -100,7 +100,11 @@ function TransToCharts(mdata) {
         }
         datasets = ChartOption(colorList, mdata, dataList, nameList);
     }
+
     avater = mdata.img;
+    if (avater == null) {
+        avater = "./src/logo/logo.jpg";
+    }
     generateCharts(datasets);
     SetAvater(avater);
     SetChartTitle(mdata.marketId);
@@ -167,7 +171,6 @@ function slugData(data, key) {
     for (let index = 0; index < slug.length; index++) {
         // slug[index] = slug[index].replace(/'/g, '`')
         slug[index] = slug[index].replace(/</g, '< ')
-
         subbody += '<div class="card mb-1 collapsed-card">\
                 <div class="card-header" style="background-color: #adb5bd48"> \
                     <h3 class="card-title">'+ slug[index] + '</h3>\
