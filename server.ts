@@ -1,4 +1,4 @@
-import SDK from "./packages/sdk/dist";
+import SDK from "./packages/sdk";
 // import types from "@zeitgeistpm/sdk/dist/types";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 

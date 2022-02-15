@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var dist_1 = require("./packages/sdk/dist");
+var sdk_1 = require("./packages/sdk");
 // import types from "@zeitgeistpm/sdk/dist/types";
 var api_1 = require("@polkadot/api");
 //=================================================================
@@ -72,7 +72,7 @@ function SDKInit() {
             switch (_a.label) {
                 case 0:
                     console.log("start");
-                    return [4 /*yield*/, dist_1["default"].initialize(ZTGNET, { graphQlEndpoint: graphQlEndpoint })];
+                    return [4 /*yield*/, sdk_1["default"].initialize(ZTGNET, { graphQlEndpoint: graphQlEndpoint })];
                 case 1:
                     res = _a.sent();
                     return [2 /*return*/, res];

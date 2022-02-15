@@ -36,7 +36,7 @@ function ChartOption(colorList, mdata, dataList, nameList) {
                     normal: {
                         // formatter: '{b}:{c}' + '\n\r' + '({d}%)',
                         show: false,
-                        position: 'center'
+                        // position: 'center'
                     },
                     emphasis: {
                         show: true,
@@ -103,7 +103,7 @@ function TransToCharts(mdata) {
 
     avater = mdata.img;
     if (avater == null) {
-        avater = "./src/logo/logo.jpg";
+        avater = "./src/Logo/logo.jpg";
     }
     generateCharts(datasets);
     SetAvater(avater);
