@@ -46,7 +46,7 @@ var dist = {};
 var InfoDist = {};
 var SlugDist = {};
 var mSlugDist = {};
-var express = require('express'), app = express(), server = require('http').createServer(app), io = require('socket.io')(server), port = process.env.PORT || 6603; //服务器端口
+var express = require('express'), app = express(), server = require('http').createServer(app), io = require('socket.io')(server), port = process.env.PORT || 6604; //服务器端口
 app.use(express.static(__dirname + '/html'));
 var ZTGNET = "wss://bp-rpc.zeitgeist.pm";
 var opts = {
