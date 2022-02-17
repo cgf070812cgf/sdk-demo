@@ -9,7 +9,7 @@
     "@zeitgeistpm/sdk": "^0.4.4",
     "admin-lte": "^3.2.0",
     "echarts": "^5.3.0",
-    "express": "^4.17.2",
+    "express": "^4.17.3",
     "socket.io": "^4.4.1"
   }
 }
