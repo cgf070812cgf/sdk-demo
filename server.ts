@@ -1,4 +1,5 @@
-import SDK from "./packages/sdk";
+// import SDK from "./packages/sdk";
+import SDK from "@zeitgeistpm/sdk"
 // import types from "@zeitgeistpm/sdk/dist/types";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 
@@ -10,6 +11,7 @@ var dist = {};
 var InfoDist = {};
 var SlugDist = {};
 var mSlugDist = {};
+var dist_none = [];
 var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
@@ -17,7 +19,8 @@ var express = require('express'),
     port = process.env.PORT || 6603;	//服务器端口
 app.use(express.static(__dirname + '/html'));
 
-const ZTGNET = "wss://bp-rpc.zeitgeist.pm";
+const ZTGNET = "wss://bsr.zeitgeist.pm";
+// const ZTGNET = "wss://bp-rpc.zeitgeist.pm";
 // wss://bsr.zeitgeist.pm
 // wss://bp-rpc.zeitgeist.pm
 type Options = {
@@ -52,7 +55,7 @@ let {
     creator,
     oracle,
 } = opts;
-var provider = new WsProvider(ZTGNET);
+var provider = new WsProvider("wss://bp-rpc.zeitgeist.pm");
 
 //======================================================
 
@@ -74,7 +77,14 @@ async function m_MarketsInfo(id: number, flag: boolean) {
     if (flag) {
         res = await InitSDK.fetchMarketData(id);
     } else {
-        res = InfoDist[id];
+        // ~~~~~~~~~~~~~~~~~~~~
+        if (dist_none.includes(id)) {
+            res = id
+        }
+        else {
+            res = InfoDist[id];
+        }
+
     }
 
     return res;
@@ -98,6 +108,15 @@ function GetSlug(tag, slug, marketId, categories) {
         mSlugDist[tag]['marketId'] = [];
         mSlugDist[tag]['categories'] = [];
     }
+
+    if (slug == "no_eixt") {
+        mSlugDist[tag]['slug'].push(slug);
+        mSlugDist[tag]['marketId'].push(marketId);
+        mSlugDist[tag]['categories'].push(categories);
+
+        return
+    }
+
     if (slug == null) {
         slug = 'null'
     }
@@ -179,8 +198,10 @@ function GetTagList() {
                             }
                         })
                         .catch(function (value) {
-                            console.log(value);
-                            console.log("tag collect error")
+                            let str = JSON.stringify(value.message);
+                            dist_none.push(parseInt(str.split(" ")[4]))
+                            console.log("market" + str.split(" ")[4] + " is not eixt")
+                            mCount--;
                             // console.log(dist)
                         })
                 }, 1)
@@ -220,15 +241,29 @@ function GetCount(socket, flag) {
             console.log('ERROR:' + value);
         })
 }
+
 // 发送市场详情
 function GetInfo(socket, id) {
     console.log("GetInfo")
     m_MarketsInfo(id, false)
         .then(function (value) {
-            socket.emit('MarketInfo', {			//发送给当前通信的客户端
-                data: value.toJSONString(),
-                name: "MarketInfo"
-            });
+            if (dist_none.includes(id)) {
+
+                socket.emit('MarketInfo', {			//发送给当前通信的客户端
+                    data: id,
+                    name: "MarketInfo",
+                })
+            }
+
+            else {
+                // console.log(value);
+
+                socket.emit('MarketInfo', {			//发送给当前通信的客户端
+                    data: value.toJSONString(),
+                    name: "MarketInfo"
+                });
+            }
+
         })
         .catch(function (value) {
             console.log('ERROR:' + value);
@@ -272,6 +307,7 @@ SDKInit()
                 GetCount(socket, true);
             });
             socket.on('GetInfo', async (data) => {
+                // console.log(data)
                 let id = Number(data.id);
                 GetInfo(socket, id);
             });

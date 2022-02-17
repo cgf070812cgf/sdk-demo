@@ -15,6 +15,7 @@ function emitMarketCount() {
     });
 }
 function emitMarketInfo(mid) {
+    // console.log(mid)
     socket.emit('GetInfo', {
         id: mid	//消息发送时间
     }, function (a) {	//回调函数
@@ -34,6 +35,7 @@ function changeid(data) {
     if (work == "next" && curid < curCount ) {
         console.log("next")
         curid += 1;
+        // console.log(curid)
         JumpTo(curid)
     }
     console.log(curid)
@@ -45,8 +47,10 @@ function Jumpid(){
 }
 
 function JumpTo(id) {
+    // console.log(id)  
     myChart.showLoading();
     if(id > 0){
+        // console.log(id)
         emitMarketInfo(id)
     }else{
         SetDefaultChart(g_info)

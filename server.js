@@ -36,7 +36,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var sdk_1 = require("./packages/sdk");
+// import SDK from "./packages/sdk";
+var sdk_1 = require("@zeitgeistpm/sdk");
 // import types from "@zeitgeistpm/sdk/dist/types";
 var api_1 = require("@polkadot/api");
 //=================================================================
@@ -46,9 +47,10 @@ var dist = {};
 var InfoDist = {};
 var SlugDist = {};
 var mSlugDist = {};
-var express = require('express'), app = express(), server = require('http').createServer(app), io = require('socket.io')(server), port = process.env.PORT || 6604; //服务器端口
+var dist_none = [];
+var express = require('express'), app = express(), server = require('http').createServer(app), io = require('socket.io')(server), port = process.env.PORT || 6603; //服务器端口
 app.use(express.static(__dirname + '/html'));
-var ZTGNET = "wss://bp-rpc.zeitgeist.pm";
+var ZTGNET = "wss://bsr.zeitgeist.pm";
 var opts = {
     endpoint: ZTGNET,
     graphQlEndpoint: "https://processor.zeitgeist.pm/graphql",
@@ -63,7 +65,7 @@ var endpoint = opts.endpoint, graphQlEndpoint = opts.graphQlEndpoint,
 // ordering,
 // orderBy,
 pageNumber = opts.pageNumber, pageSize = opts.pageSize, creator = opts.creator, oracle = opts.oracle;
-var provider = new api_1.WsProvider(ZTGNET);
+var provider = new api_1.WsProvider("wss://bp-rpc.zeitgeist.pm");
 //======================================================
 function SDKInit() {
     return __awaiter(this, void 0, void 0, function () {
@@ -106,7 +108,13 @@ function m_MarketsInfo(id, flag) {
                     res = _a.sent();
                     return [3 /*break*/, 3];
                 case 2:
-                    res = InfoDist[id];
+                    // ~~~~~~~~~~~~~~~~~~~~
+                    if (dist_none.includes(id)) {
+                        res = id;
+                    }
+                    else {
+                        res = InfoDist[id];
+                    }
                     _a.label = 3;
                 case 3: return [2 /*return*/, res];
             }
@@ -140,6 +148,12 @@ function GetSlug(tag, slug, marketId, categories) {
         mSlugDist[tag]['slug'] = [];
         mSlugDist[tag]['marketId'] = [];
         mSlugDist[tag]['categories'] = [];
+    }
+    if (slug == "no_eixt") {
+        mSlugDist[tag]['slug'].push(slug);
+        mSlugDist[tag]['marketId'].push(marketId);
+        mSlugDist[tag]['categories'].push(categories);
+        return;
     }
     if (slug == null) {
         slug = 'null';
@@ -221,8 +235,10 @@ function GetTagList() {
                         dist = mdist;
                     }
                 })["catch"](function (value) {
-                    console.log(value);
-                    console.log("tag collect error");
+                    var str = JSON.stringify(value.message);
+                    dist_none.push(parseInt(str.split(" ")[4]));
+                    console.log("market" + str.split(" ")[4] + " is not eixt");
+                    mCount--;
                     // console.log(dist)
                 });
             }, 1);
@@ -267,10 +283,19 @@ function GetInfo(socket, id) {
     console.log("GetInfo");
     m_MarketsInfo(id, false)
         .then(function (value) {
-        socket.emit('MarketInfo', {
-            data: value.toJSONString(),
-            name: "MarketInfo"
-        });
+        if (dist_none.includes(id)) {
+            socket.emit('MarketInfo', {
+                data: id,
+                name: "MarketInfo"
+            });
+        }
+        else {
+            // console.log(value);
+            socket.emit('MarketInfo', {
+                data: value.toJSONString(),
+                name: "MarketInfo"
+            });
+        }
     })["catch"](function (value) {
         console.log('ERROR:' + value);
     });

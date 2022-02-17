@@ -69,9 +69,9 @@ function generateCharts(dist) {
     myChart.hideLoading();
     myChart.setOption(dist)
 }
-function SetAvater(img) {
-    $('#marketavater').attr("src", img);
-}
+// function SetAvater(img) {
+//     $('#marketavater').attr("src", img);
+// }
 function SetChartTitle(data) {
     document.getElementById("market_id").innerHTML = 'MarketId: ' + data
     CurID = data;
@@ -101,12 +101,12 @@ function TransToCharts(mdata) {
         datasets = ChartOption(colorList, mdata, dataList, nameList);
     }
 
-    avater = mdata.img;
-    if (avater == null) {
-        avater = "./src/Logo/logo.jpg";
-    }
+    // avater = mdata.img;
+    // if (avater == null) {
+    //     avater = "./src/Logo/logo.jpg";
+    // }
     generateCharts(datasets);
-    SetAvater(avater);
+    // SetAvater(avater);
     SetChartTitle(mdata.marketId);
     SetChartTags(mdata.tags)
 }
@@ -114,7 +114,7 @@ function buildColor() {
     var color = "#" + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, "0");
     return color;
 }
-//
+
 function SetDefaultChart(data) {
     var nameList = [];
     var datasets = {};
@@ -133,7 +133,7 @@ function SetDefaultChart(data) {
     }
 
     generateCharts(datasets);
-    SetAvater('./src/Logo/logo.jpg');
+    // SetAvater('./src/Logo/logo.jpg');
     SetChartTags(['ALL OF TAGS'])
     SetChartTitle('0')
 }
@@ -202,10 +202,18 @@ socket.on('MarketCount', (data) => {
 
 socket.on('MarketInfo', (data) => {
     var res = data.data;
-    console.log(data.name)
-    console.log(JSON.parse(res))
-    // var alllist = data.all;
-    TransToCharts(JSON.parse(res))
+    if (typeof (res) == "number") {
+        document.getElementById("markettags").innerHTML = '<div style="font-size: 40px; font-style: oblique;">Market no exit</div>'
+        CurID = res
+        document.getElementById("market_id").innerHTML = 'MarketId: ' + CurID
+        document.getElementById("id_input").value = CurID;
+    }
+    else {
+        console.log(data.name)
+        console.log(JSON.parse(res))
+        // var alllist = data.all;
+        TransToCharts(JSON.parse(res))
+    }
 
 });
 socket.on('GetBlock', (data) => {
