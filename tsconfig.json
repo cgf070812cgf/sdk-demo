@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "ES5", // 目标语言的版本
+        "module": "commonjs", // 指定生成代码的模板标准
+        "noImplicitAny": false, // 不允许隐式的 any 类型
+        "removeComments": true, // 删除注释 
+        "preserveConstEnums": true, // 保留 const 和 enum 声明
+        "esModuleInterop": true, // 允许export=导出，由import from 导入
+        "skipLibCheck": true, //忽略第三方包报类型兼容错误
+        // "sourceMap": true, // 生成目标文件的sourceMap文件
+    },
+    "files": [ // 指定待编译文件
+        "./server.ts",
+        "./info.ts",
+    ],
+    "exclude": [
+        "./node_modules" // 排除node_modules文件夹下的文件不会编译
+    ]
+}

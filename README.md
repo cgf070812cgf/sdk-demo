@@ -5,7 +5,7 @@
 
 ## 编译 server.ts
 ```shell
-tsc server.ts
+tsc
 ```
 
 ## 运行
