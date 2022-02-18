@@ -2,7 +2,7 @@
     "compilerOptions": {
         "target": "ES5", // 目标语言的版本
         "module": "commonjs", // 指定生成代码的模板标准
-        "noImplicitAny": false, // 不允许隐式的 any 类型
+        "noImplicitAny": false, // 允许隐式的 any 类型
         "removeComments": true, // 删除注释 
         "preserveConstEnums": true, // 保留 const 和 enum 声明
         "esModuleInterop": true, // 允许export=导出，由import from 导入
