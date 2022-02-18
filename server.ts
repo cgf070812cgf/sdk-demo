@@ -55,8 +55,8 @@ let {
     creator,
     oracle,
 } = opts;
-var provider = new WsProvider("wss://bp-rpc.zeitgeist.pm");
-
+// var provider = new WsProvider("wss://bp-rpc.zeitgeist.pm");
+var provider = new WsProvider(ZTGNET);
 //======================================================
 
 async function SDKInit() {

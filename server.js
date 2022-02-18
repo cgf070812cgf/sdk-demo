@@ -58,7 +58,7 @@ var opts = {
     pageNumber: 1
 };
 var endpoint = opts.endpoint, graphQlEndpoint = opts.graphQlEndpoint, pageNumber = opts.pageNumber, pageSize = opts.pageSize, creator = opts.creator, oracle = opts.oracle;
-var provider = new api_1.WsProvider("wss://bp-rpc.zeitgeist.pm");
+var provider = new api_1.WsProvider(ZTGNET);
 function SDKInit() {
     return __awaiter(this, void 0, void 0, function () {
         var res;
@@ -215,7 +215,7 @@ function GetTagList() {
                     .catch(function (value) {
                     var str = JSON.stringify(value.message);
                     dist_none.push(parseInt(str.split(" ")[4]));
-                    console.log("market" + str.split(" ")[4] + " is not eixt");
+                    console.log("market " + str.split(" ")[4] + " is not eixt");
                     mCount--;
                 });
             }, 1);
