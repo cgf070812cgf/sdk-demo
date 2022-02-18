@@ -35,12 +35,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-exports.__esModule = true;
-// import SDK from "./packages/sdk";
-var sdk_1 = require("@zeitgeistpm/sdk");
-// import types from "@zeitgeistpm/sdk/dist/types";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var sdk_1 = __importDefault(require("@zeitgeistpm/sdk"));
 var api_1 = require("@polkadot/api");
-//=================================================================
 var InitSDK;
 var ConnectSum = 0;
 var dist = {};
@@ -48,25 +48,17 @@ var InfoDist = {};
 var SlugDist = {};
 var mSlugDist = {};
 var dist_none = [];
-var express = require('express'), app = express(), server = require('http').createServer(app), io = require('socket.io')(server), port = process.env.PORT || 6603; //服务器端口
+var express = require('express'), app = express(), server = require('http').createServer(app), io = require('socket.io')(server), port = process.env.PORT || 6603;
 app.use(express.static(__dirname + '/html'));
 var ZTGNET = "wss://bsr.zeitgeist.pm";
 var opts = {
     endpoint: ZTGNET,
     graphQlEndpoint: "https://processor.zeitgeist.pm/graphql",
-    // statuses: ["Active"],
-    // orderBy: "newest",
-    // ordering: "desc",
     pageSize: 10,
     pageNumber: 1
 };
-var endpoint = opts.endpoint, graphQlEndpoint = opts.graphQlEndpoint, 
-// statuses,
-// ordering,
-// orderBy,
-pageNumber = opts.pageNumber, pageSize = opts.pageSize, creator = opts.creator, oracle = opts.oracle;
+var endpoint = opts.endpoint, graphQlEndpoint = opts.graphQlEndpoint, pageNumber = opts.pageNumber, pageSize = opts.pageSize, creator = opts.creator, oracle = opts.oracle;
 var provider = new api_1.WsProvider("wss://bp-rpc.zeitgeist.pm");
-//======================================================
 function SDKInit() {
     return __awaiter(this, void 0, void 0, function () {
         var res;
@@ -74,10 +66,10 @@ function SDKInit() {
             switch (_a.label) {
                 case 0:
                     console.log("start");
-                    return [4 /*yield*/, sdk_1["default"].initialize(ZTGNET, { graphQlEndpoint: graphQlEndpoint })];
+                    return [4, sdk_1.default.initialize(ZTGNET, { graphQlEndpoint: graphQlEndpoint })];
                 case 1:
                     res = _a.sent();
-                    return [2 /*return*/, res];
+                    return [2, res];
             }
         });
     });
@@ -87,11 +79,11 @@ function m_MarketCount() {
         var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, InitSDK.getMarketCount()];
+                case 0: return [4, InitSDK.getMarketCount()];
                 case 1:
                     res = _a.sent();
                     console.log(res);
-                    return [2 /*return*/, res];
+                    return [2, res];
             }
         });
     });
@@ -102,13 +94,12 @@ function m_MarketsInfo(id, flag) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!flag) return [3 /*break*/, 2];
-                    return [4 /*yield*/, InitSDK.fetchMarketData(id)];
+                    if (!flag) return [3, 2];
+                    return [4, InitSDK.fetchMarketData(id)];
                 case 1:
                     res = _a.sent();
-                    return [3 /*break*/, 3];
+                    return [3, 3];
                 case 2:
-                    // ~~~~~~~~~~~~~~~~~~~~
                     if (dist_none.includes(id)) {
                         res = id;
                     }
@@ -116,7 +107,7 @@ function m_MarketsInfo(id, flag) {
                         res = InfoDist[id];
                     }
                     _a.label = 3;
-                case 3: return [2 /*return*/, res];
+                case 3: return [2, res];
             }
         });
     });
@@ -126,22 +117,19 @@ function m_BlockInfo() {
         var api, blockNumber;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, api_1.ApiPromise.create({ provider: provider })];
+                case 0: return [4, api_1.ApiPromise.create({ provider: provider })];
                 case 1:
                     api = _a.sent();
-                    return [4 /*yield*/, Promise.all([
+                    return [4, Promise.all([
                             api.rpc.chain.getHeader(),
                         ])];
                 case 2:
                     blockNumber = _a.sent();
-                    return [2 /*return*/, blockNumber];
+                    return [2, blockNumber];
             }
         });
     });
 }
-//=======================
-//  获取每个Info中的slug
-//=======================
 function GetSlug(tag, slug, marketId, categories) {
     if (!mSlugDist.hasOwnProperty(tag)) {
         mSlugDist[tag] = {};
@@ -161,16 +149,12 @@ function GetSlug(tag, slug, marketId, categories) {
     mSlugDist[tag]['slug'].push(slug);
     mSlugDist[tag]['marketId'].push(marketId);
     mSlugDist[tag]['categories'].push(categories);
-    // console.log('=========' + marketId + '========' + slug);
 }
 function SaveSlug() {
-    // 内容转存， temp容器清空
-    // SlugDist = Object.keys(mSlugDist).sort(function(a, b) {return mSlugDist[a]['marketId'].length - mSlugDist[b]['marketId'].length});
     SlugDist = mSlugDist;
     mSlugDist = {};
     console.log(SlugDist);
 }
-//定时任务
 function intervalFunc() {
     if (ConnectSum > 0) {
         console.log('===Flush data===');
@@ -179,12 +163,8 @@ function intervalFunc() {
         console.log('===Flush done===');
     }
 }
-//=====================
-//  获取tag列表 1. 拿到市场总数   2. 遍历市场， 拿到所有Info中的tag, 存入列表
-//  服务器主动发送， 不接受获取请求
 function GetTagList() {
     console.log("GetMarketCount");
-    // 获取市场数量
     m_MarketCount()
         .then(function (value) {
         var mdist = {};
@@ -201,7 +181,6 @@ function GetTagList() {
                     var marketId = value.marketId;
                     var categories = value.categories;
                     InfoDist[marketId] = value;
-                    // 无tag的market存储
                     if (tags.length == 0) {
                         if (mdist.hasOwnProperty('null')) {
                             mdist['null'] += 1;
@@ -226,28 +205,26 @@ function GetTagList() {
                     }
                     mdist['sum_count'] += 1;
                     console.log("collect finish:" + index + '  already:' + mdist['sum_count'] + '  Sum:' + mCount);
-                    //由于是异步操作只能通过每次检查计数判断是否读取完成
                     if (mdist['sum_count'] == mCount) {
                         SaveSlug();
                         console.log("tag collect finish");
                         setInterval(intervalFunc, 10000);
-                        // console.log(mdist)
                         dist = mdist;
                     }
-                })["catch"](function (value) {
+                })
+                    .catch(function (value) {
                     var str = JSON.stringify(value.message);
                     dist_none.push(parseInt(str.split(" ")[4]));
                     console.log("market" + str.split(" ")[4] + " is not eixt");
                     mCount--;
-                    // console.log(dist)
                 });
             }, 1);
         };
-        // 遍历每个market获取Info
         for (var index = 1; index <= mCount; index++) {
             _loop_1(index);
         }
-    })["catch"](function (value) {
+    })
+        .catch(function (value) {
         console.log('ERROR:' + value);
     });
 }
@@ -274,11 +251,11 @@ function GetCount(socket, flag) {
                 name: "MarketCount"
             });
         }
-    })["catch"](function (value) {
+    })
+        .catch(function (value) {
         console.log('ERROR:' + value);
     });
 }
-// 发送市场详情
 function GetInfo(socket, id) {
     console.log("GetInfo");
     m_MarketsInfo(id, false)
@@ -286,21 +263,20 @@ function GetInfo(socket, id) {
         if (dist_none.includes(id)) {
             socket.emit('MarketInfo', {
                 data: id,
-                name: "MarketInfo"
+                name: "MarketInfo",
             });
         }
         else {
-            // console.log(value);
             socket.emit('MarketInfo', {
                 data: value.toJSONString(),
                 name: "MarketInfo"
             });
         }
-    })["catch"](function (value) {
+    })
+        .catch(function (value) {
         console.log('ERROR:' + value);
     });
 }
-// 发送节点高度
 function GetBlock(socket, flag) {
     console.log("GetBlock");
     m_BlockInfo()
@@ -317,11 +293,11 @@ function GetBlock(socket, flag) {
                 name: "GetBlock"
             });
         }
-    })["catch"](function (value) {
+    })
+        .catch(function (value) {
         console.log('ERROR:' + value);
     });
 }
-//====================================================
 SDKInit()
     .then(function (value) {
     var _this = this;
@@ -337,7 +313,7 @@ SDKInit()
             socket.on('GetCount', function (data) { return __awaiter(_this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     GetCount(socket, true);
-                    return [2 /*return*/];
+                    return [2];
                 });
             }); });
             socket.on('GetInfo', function (data) { return __awaiter(_this, void 0, void 0, function () {
@@ -345,26 +321,27 @@ SDKInit()
                 return __generator(this, function (_a) {
                     id = Number(data.id);
                     GetInfo(socket, id);
-                    return [2 /*return*/];
+                    return [2];
                 });
             }); });
             socket.on('GetBlock', function (data) { return __awaiter(_this, void 0, void 0, function () {
                 return __generator(this, function (_a) {
                     GetBlock(socket, true);
-                    return [2 /*return*/];
+                    return [2];
                 });
             }); });
             socket.on('disconnect', function () {
                 ConnectSum -= 1;
                 console.log('[' + ConnectSum + '] one leave');
             });
-            return [2 /*return*/];
+            return [2];
         });
     }); });
     server.listen(port, function () {
         console.log('listening on %d...', port);
         console.log('open browser: localhost:%d', port);
     });
-})["catch"](function (value) {
+})
+    .catch(function (value) {
     console.log('ERROR:' + value);
 });
