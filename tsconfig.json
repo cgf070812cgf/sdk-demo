@@ -11,7 +11,7 @@
     },
     "files": [ // 指定待编译文件
         "./server.ts",
-        "./info.ts",
+        // "./info.ts",
     ],
     "exclude": [
         "./node_modules" // 排除node_modules文件夹下的文件不会编译
