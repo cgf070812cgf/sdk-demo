@@ -200,7 +200,7 @@ function GetTagList() {
                         .catch(function (value) {
                             let str = JSON.stringify(value.message);
                             dist_none.push(parseInt(str.split(" ")[4]))
-                            console.log("market" + str.split(" ")[4] + " is not eixt")
+                            console.log("market " + str.split(" ")[4] + " is not eixt")
                             mCount--;
                             // console.log(dist)
                         })

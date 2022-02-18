@@ -34,9 +34,9 @@ function ChartOption(colorList, mdata, dataList, nameList) {
                 },
                 label: {
                     normal: {
-                        // formatter: '{b}:{c}' + '\n\r' + '({d}%)',
+                        formatter: '{b}:{c}' + '\n\r' + '({d}%)',
                         show: false,
-                        // position: 'center'
+                        position: 'center'
                     },
                     emphasis: {
                         show: true,
